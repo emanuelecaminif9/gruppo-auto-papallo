@@ -1,0 +1,11 @@
+Ho sistemato la sezione Servizi configurabili:
+- 8 servizi disposti 4 per riga su desktop;
+- 2 per riga su tablet;
+- 1 per riga su smartphone;
+- testi più leggibili;
+- Auto sostitutiva corretta senza tag HTML errato.
+
+Aggiornamento:
+git add .
+git commit -m "Sistemata griglia servizi configurabili"
+git push

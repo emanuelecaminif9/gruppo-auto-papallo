@@ -1,0 +1,12 @@
+Sono state aggiunte immagini hero dedicate a:
+- homepage
+- noleggio privati
+- noleggio aziende
+- noleggio professionisti
+- noleggio CHTEC
+- veicoli commerciali
+
+Per aggiornare GitHub e Render:
+git add .
+git commit -m "Aggiunte immagini hero dedicate"
+git push

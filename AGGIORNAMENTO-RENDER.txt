@@ -1,0 +1,26 @@
+COME AGGIORNARE IL SITO GIÀ PUBBLICATO SU RENDER
+
+1. Estrai questa cartella sul Desktop.
+2. Non copiare il file .env nel repository: le variabili restano configurate su Render.
+3. Apri il Terminale nella nuova cartella:
+
+cd ~/Desktop/gruppo-auto-papallo-restyling
+
+4. Collega il repository esistente oppure copia questi file nella cartella Git già collegata.
+5. Esegui:
+
+git add .
+git commit -m "Restyling completo noleggio Papallo"
+git push
+
+6. Vai su Render > Events e attendi "Deploy live".
+7. Se non parte automaticamente:
+Manual Deploy > Deploy latest commit.
+8. Dopo il deploy aggiorna il browser senza cache:
+Mac: Command + Shift + R
+Windows: Control + F5
+
+IMPORTANTE
+- Mantieni su Render le variabili ADMIN_EMAIL, ADMIN_PASSWORD_HASH, JWT_SECRET, ADMIN_PATH e PUBLIC_URL.
+- Se hai un disco persistente, mantieni STORAGE_DIR=/var/data.
+- Le nuove categorie sono selezionabili direttamente nel pannello admin.

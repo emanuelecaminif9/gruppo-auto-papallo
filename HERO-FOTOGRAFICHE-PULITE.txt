@@ -1,0 +1,13 @@
+Sono state sostituite tutte le hero con immagini fotografiche pulite e senza scritte:
+
+- homepage: berlina blu su strada costiera;
+- privati: famiglia con SUV;
+- aziende: flotta aziendale;
+- professionisti: professionista con auto premium;
+- CHTEC: veicolo elettrico in ricarica;
+- veicoli commerciali: flotta di furgoni.
+
+Per aggiornare GitHub e Render:
+git add .
+git commit -m "Sostituite hero con immagini fotografiche pulite"
+git push

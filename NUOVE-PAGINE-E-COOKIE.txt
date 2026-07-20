@@ -1,0 +1,22 @@
+AGGIORNAMENTO COMPLETATO
+
+Nuove pagine:
+- noleggio-privati.html
+- noleggio-aziende.html
+- noleggio-professionisti.html
+- noleggio-chtec.html
+- veicoli-commerciali.html
+
+Ogni pagina mostra automaticamente i veicoli della relativa categoria.
+
+Privacy e cookie:
+- Privacy Policy riorganizzata
+- Cookie Policy riorganizzata
+- banner con Solo necessari / Accetta contenuti esterni
+- Google Maps bloccato fino al consenso
+- pulsante Preferenze cookie nel footer
+
+Aggiornamento Render:
+git add .
+git commit -m "Aggiunte pagine servizi e banner cookie"
+git push

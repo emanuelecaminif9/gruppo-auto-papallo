@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff">
+  <title>Gestione noleggio | Gruppo Auto Papallo</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <section class="login-view" id="login-view">
+      <form class="login-card" id="login-form">
+        <img src="assets/logo-papallo-blu-final-2026.png" alt="Gruppo Auto Papallo">
+        <small>AREA RISERVATA</small><h1>Gestione noleggio</h1>
+        <p>Accedi per inserire, modificare o eliminare le auto presenti sul sito.</p>
+        <label>Email<input type="email" name="email" required autocomplete="username"></label>
+        <label>Password<input type="password" name="password" required autocomplete="current-password"></label>
+        <button type="submit">Accedi</button><p class="status" id="login-status"></p>
+      </form>
+    </section>
+
+    <section class="dashboard" id="dashboard" hidden>
+      <header class="admin-header">
+        <div><img src="assets/logo-papallo-blu-final-2026.png" alt="Gruppo Auto Papallo"><span>Pannello noleggio</span></div>
+        <nav><a href="/" target="_blank">Apri il sito ↗</a><button id="logout">Esci</button></nav>
+      </header>
+      <div class="dashboard-body">
+        <div class="dashboard-title"><div><small>PARCO AUTO</small><h1>Auto a noleggio</h1><p>Gestisci in autonomia vetture, prezzi, foto e disponibilità.</p></div><button class="primary" id="new-vehicle">＋ Inserisci auto</button></div>
+        <div class="stats"><article><span id="total-count">0</span><small>Auto totali</small></article><article><span id="active-count">0</span><small>Pubblicate</small></article><article><span id="reserved-count">0</span><small>Prenotate</small></article></div>
+        <div class="admin-list" id="admin-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="vehicle-dialog">
+    <form id="vehicle-form" enctype="multipart/form-data">
+      <div class="modal-head"><div><small id="modal-kicker">NUOVA AUTO</small><h2 id="modal-title">Inserisci un’auto</h2></div><button type="button" class="close" id="close-dialog">×</button></div>
+      <input type="hidden" name="id">
+      <div class="form-grid">
+        <label>Marca *<input name="brand" required maxlength="60" placeholder="Es. Fiat"></label>
+        <label>Modello *<input name="model" required maxlength="80" placeholder="Es. 500 Hybrid"></label>
+        <label>Categoria *
+          <select name="category" required>
+            <option value="">Seleziona una categoria</option>
+            <option value="Noleggio Privati">Noleggio Privati</option>
+            <option value="Noleggio Aziende">Noleggio Aziende</option>
+            <option value="Noleggio Professionisti">Noleggio Professionisti</option>
+            <option value="Noleggio CHTEC">Noleggio CHTEC</option>
+            <option value="Noleggio Veicoli Commerciali">Noleggio Veicoli Commerciali</option>
+          </select>
+        </label>
+        <label>Prezzo *<input name="price" required type="number" min="0" step="1" placeholder="499"></label>
+        <label>Unità prezzo<select name="priceUnit"><option value="giorno">al giorno</option><option value="settimana">a settimana</option><option value="mese" selected>al mese</option></select></label>
+        <label>Alimentazione<input name="fuel" maxlength="40" placeholder="Es. Hybrid"></label>
+        <label>Cambio<input name="transmission" maxlength="40" placeholder="Es. Automatico"></label>
+        <label>Posti<input name="seats" type="number" min="1" max="20" placeholder="5"></label>
+        <label>Anno<input name="year" type="number" min="1950" max="2100" placeholder="2025"></label>
+        <label>Durata contratto<input name="duration" maxlength="40" placeholder="Es. 36 mesi"></label>
+        <label>Km inclusi<input name="includedKm" maxlength="40" placeholder="Es. 30.000 km"></label>
+        <label>Anticipo (€)<input name="advance" type="number" min="0" step="1" placeholder="2000"></label>
+        <label>IVA
+          <select name="vatMode">
+            <option value="included">IVA inclusa</option>
+            <option value="excluded">IVA esclusa</option>
+          </select>
+        </label>
+        <label>Promozione
+          <select name="promo">
+            <option value="false">No</option>
+            <option value="true">Sì</option>
+          </select>
+        </label>
+        <label>Disponibilità<select name="status"><option value="available">Disponibile</option><option value="reserved">Prenotata</option></select></label>
+      </div>
+      <label>Descrizione<textarea name="description" maxlength="500" rows="4" placeholder="Descrizione breve della vettura e dell’offerta..."></textarea></label>
+      <label class="upload-box">Foto dell’auto <span>JPG, PNG o WebP — massimo 10 foto, 6 MB ciascuna</span><input name="images" type="file" accept="image/jpeg,image/png,image/webp" multiple><div id="image-preview"></div></label>
+      <label class="switch-row"><input name="active" type="checkbox" checked><span>Pubblica questa auto sul sito</span></label>
+      <p class="status" id="form-status"></p>
+      <div class="modal-actions"><button type="button" id="cancel-dialog">Annulla</button><button class="primary" type="submit" id="save-vehicle">Salva auto</button></div>
+    </form>
+  </dialog>
+  <script src="admin.js"></script>
+</body>
+</html>

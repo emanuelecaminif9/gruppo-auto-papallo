@@ -1,0 +1,56 @@
+[
+  {
+    "id": "demo-1",
+    "brand": "Fiat",
+    "model": "500 Hybrid",
+    "category": "Noleggio Privati",
+    "price": 499,
+    "priceUnit": "mese",
+    "fuel": "Hybrid",
+    "transmission": "Manuale",
+    "seats": 4,
+    "year": 2025,
+    "status": "available",
+    "active": true,
+    "description": "Compatta, efficiente e perfetta per la mobilità urbana.",
+    "images": [
+      "/uploads/1783953186892-e9e6c255-d30f-4728-ac61-db285baee7bb.jpg",
+      "/uploads/1783953186893-d10b2ff5-73c1-4b24-b441-33f30ac67055.jpg",
+      "/uploads/1783953186893-27978ddc-1cec-4484-bb9d-c451f0f49ce1.jpg"
+    ],
+    "createdAt": "2026-07-13T10:00:00.000Z",
+    "updatedAt": "2026-07-13T14:33:06.897Z",
+    "duration": "36 mesi",
+    "includedKm": "30.000 km",
+    "advance": 2000,
+    "vatMode": "included",
+    "promo": true
+  },
+  {
+    "id": "6ddb2d48-bae5-46f2-b961-63d719c82660",
+    "createdAt": "2026-07-13T14:22:36.616Z",
+    "brand": "Smart",
+    "model": "Fortwo",
+    "category": "Noleggio Privati",
+    "price": 299,
+    "priceUnit": "mese",
+    "fuel": "Benzina",
+    "transmission": "Automatico",
+    "seats": 2,
+    "year": 2018,
+    "status": "available",
+    "active": true,
+    "description": "Compatta, elegante e perfetta per la città: questa Smart Fortwo del 2018 con cambio automatico è la soluzione ideale per chi cerca praticità, stile e facilità di guida.\r\n\r\nLa carrozzeria nera le dona un look moderno e raffinato, mentre le dimensioni compatte permettono di muoversi agilmente nel traffico e parcheggiare con estrema facilità anche negli spazi più stretti.\r\n\r\nIl cambio automatico garantisce una guida comoda e rilassante, rendendola perfetta sia per gli spostamenti quotidiani che per chi",
+    "updatedAt": "2026-07-13T14:28:11.331Z",
+    "images": [
+      "/uploads/1783952556611-a45efd98-6a26-4451-9ab4-0274884bc78f.jpg",
+      "/uploads/1783952556613-9ae923e4-027a-4a99-81ea-504ec279aefc.jpg",
+      "/uploads/1783952556613-33ce4768-4325-43b0-940c-bc40bd593aae.jpg"
+    ],
+    "duration": "36 mesi",
+    "includedKm": "30.000 km",
+    "advance": 1000,
+    "vatMode": "included",
+    "promo": false
+  }
+]

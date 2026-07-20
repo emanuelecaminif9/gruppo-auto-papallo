@@ -1,0 +1,16 @@
+Sono state aumentate le dimensioni di:
+- menu
+- titoli
+- testi descrittivi
+- etichette
+- campi form
+- schede auto
+- dati durata/km/anticipo
+- pulsanti
+- footer
+- versione mobile
+
+Per aggiornare:
+git add .
+git commit -m "Migliorata leggibilità testi"
+git push

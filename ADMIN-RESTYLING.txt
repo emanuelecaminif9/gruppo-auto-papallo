@@ -1,0 +1,13 @@
+Pannello amministrativo aggiornato:
+- nuovo logo blu Papallo;
+- colori coordinati con il sito;
+- login più professionale;
+- header bianco e blu;
+- statistiche e lista auto più leggibili;
+- modale inserimento auto rinnovata;
+- migliore responsive mobile.
+
+Per aggiornare:
+git add .
+git commit -m "Restyling pannello amministrativo"
+git push
