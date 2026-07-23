@@ -36,6 +36,25 @@
     'Noleggio Veicoli Commerciali'
   ];
 
+  const FUEL_VISUALS = Object.freeze({
+    'Plug-in Hybrid': {
+      label: 'Plug-in Hybrid',
+      image: 'assets/admin-fuel/plug-in-hybrid.jpg'
+    },
+    Hybrid: {
+      label: 'Hybrid',
+      image: 'assets/admin-fuel/hybrid.jpg'
+    },
+    Elettrica: {
+      label: 'Elettrica',
+      image: 'assets/admin-fuel/elettrica.jpg'
+    },
+    Termica: {
+      label: 'Termica',
+      image: 'assets/admin-fuel/termica.jpg'
+    }
+  });
+
   let vehicles = [];
   let activeCategory = 'all';
   let currentVehicle = null;
@@ -82,6 +101,32 @@
       vehicle.seats ? `${vehicle.seats} posti` : '',
       vehicle.year ? `Anno ${vehicle.year}` : ''
     ].filter(Boolean);
+  }
+
+  function resolveFuelVisual(value) {
+    const normalized = String(value || '').trim().toLowerCase();
+    if (normalized.includes('plug')) return FUEL_VISUALS['Plug-in Hybrid'];
+    if (normalized.includes('elettr') || normalized.includes('electric')) return FUEL_VISUALS.Elettrica;
+    if (normalized.includes('hybrid') || normalized.includes('ibrid')) return FUEL_VISUALS.Hybrid;
+    if (
+      normalized.includes('termic')
+      || ['benzina', 'diesel', 'gpl', 'metano', 'gas'].some(type => normalized.includes(type))
+    ) return FUEL_VISUALS.Termica;
+    return null;
+  }
+
+  function fuelVisualMarkup(vehicle, extraClass = '') {
+    const visual = resolveFuelVisual(vehicle.fuel);
+    if (!visual) return '';
+
+    return `<figure class="vehicle-fuel-visual ${extraClass}">
+      <img src="${escapeHtml(visual.image)}" alt="Alimentazione ${escapeHtml(visual.label)}" loading="lazy">
+      <figcaption>
+        <small>Alimentazione selezionata</small>
+        <strong>${escapeHtml(visual.label)}</strong>
+        <span>Motorizzazione indicata per questa offerta.</span>
+      </figcaption>
+    </figure>`;
   }
 
   function formatOfferDate(value) {
@@ -162,6 +207,7 @@
           <div class="vehicle-type">${escapeHtml(category)}</div>
           <h3>${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</h3>
           <div class="vehicle-specs">${specs.map(spec => `<span>${escapeHtml(spec)}</span>`).join('')}</div>
+          ${fuelVisualMarkup(vehicle)}
 
           <div class="offer-data-grid">
             <div><small>Durata</small><strong>${escapeHtml(duration)}</strong></div>
@@ -273,6 +319,16 @@
     modalStatus.classList.toggle('reserved', isReserved);
     modalSpecs.innerHTML = specs.map(spec => `<span>${escapeHtml(spec)}</span>`).join('');
     modalDescription.textContent = vehicle.description || 'Contattaci per ricevere tutte le informazioni sulla vettura e sulle condizioni di noleggio.';
+
+    let modalFuelVisual = document.querySelector('#vehicle-modal-fuel-visual');
+    if (!modalFuelVisual) {
+      modalFuelVisual = document.createElement('div');
+      modalFuelVisual.id = 'vehicle-modal-fuel-visual';
+      modalDescription?.before(modalFuelVisual);
+    }
+    modalFuelVisual.innerHTML = fuelVisualMarkup(vehicle, 'vehicle-fuel-visual--modal');
+    modalFuelVisual.hidden = !modalFuelVisual.innerHTML;
+
     modalPrice.textContent = euro(vehicle.price);
     modalPriceUnit.textContent = `/ ${vehicle.priceUnit || 'mese'}`;
     modalDuration.textContent = vehicle.duration || 'Da definire';

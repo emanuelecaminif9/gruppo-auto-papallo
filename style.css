@@ -2779,6 +2779,74 @@ body { background:#f7f9fc; color:#10223f; }
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:9px 18px;
 }
+.vehicle-fuel-visual {
+  display:grid;
+  grid-template-columns:110px minmax(0,1fr);
+  gap:15px;
+  align-items:center;
+  margin:16px 0 0;
+  padding:10px;
+  overflow:hidden;
+  color:#17375f;
+  border:1px solid rgba(11,79,179,.18);
+  border-radius:15px;
+  background:linear-gradient(135deg,#f8fbff,#edf5ff);
+}
+.vehicle-fuel-visual img {
+  display:block;
+  width:110px;
+  height:110px;
+  object-fit:cover;
+  border-radius:11px;
+  background:#fff;
+  box-shadow:0 7px 18px rgba(8,46,101,.09);
+}
+.vehicle-fuel-visual figcaption {
+  min-width:0;
+  padding-right:8px;
+}
+.vehicle-fuel-visual small {
+  display:block;
+  margin-bottom:5px;
+  color:#61738b;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.vehicle-fuel-visual strong {
+  display:block;
+  color:#0b4fb3;
+  font-size:18px;
+  font-weight:900;
+  line-height:1.2;
+}
+.vehicle-fuel-visual span {
+  display:block;
+  margin-top:5px;
+  color:#526b84;
+  font-size:10px;
+  font-weight:700;
+  line-height:1.4;
+}
+#vehicle-modal-fuel-visual[hidden] {
+  display:none;
+}
+.vehicle-fuel-visual--modal {
+  grid-template-columns:132px minmax(0,1fr);
+  margin:18px 0;
+  padding:13px;
+}
+.vehicle-fuel-visual--modal img {
+  width:132px;
+  height:132px;
+}
+.vehicle-fuel-visual--modal strong {
+  font-size:23px;
+}
+.vehicle-fuel-visual--modal span {
+  font-size:12px;
+}
 .vehicle-offer-disclaimer {
   margin:12px 2px 0;
   padding:10px 12px;
@@ -2838,6 +2906,24 @@ body { background:#f7f9fc; color:#10223f; }
   .vehicle-modal-offer { grid-template-columns:1fr; }
   .vehicle-modal-offer > div { border-right:0; border-bottom:1px solid rgba(8,46,101,.11); }
   .vehicle-services-modal ul { grid-template-columns:1fr; }
+  .vehicle-fuel-visual,
+  .vehicle-fuel-visual--modal {
+    grid-template-columns:82px minmax(0,1fr);
+    gap:12px;
+  }
+  .vehicle-fuel-visual img,
+  .vehicle-fuel-visual--modal img {
+    width:82px;
+    height:82px;
+  }
+  .vehicle-fuel-visual strong,
+  .vehicle-fuel-visual--modal strong {
+    font-size:17px;
+  }
+  .vehicle-fuel-visual span,
+  .vehicle-fuel-visual--modal span {
+    font-size:10px;
+  }
 }
 
 
