@@ -364,6 +364,348 @@ dialog::backdrop{
   border-radius:16px;
 }
 
+/* SERVIZI DELLE FORMULE */
+.admin-service-summary{
+  display:inline-flex;
+  margin-top:9px;
+  padding:5px 9px;
+  color:#0b4fb3;
+  background:#eaf3ff;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.fuel-config{
+  margin:26px 0 22px;
+  padding:24px;
+  border:1px solid rgba(8,46,101,.14);
+  border-radius:16px;
+  background:#fff;
+}
+
+.fuel-config-head small{
+  color:#0b4fb3;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+.fuel-config-head h3{
+  margin:5px 0 6px;
+  color:#06275b;
+  font-size:22px;
+}
+
+.fuel-config-head p{
+  margin:0;
+  color:#61738b;
+  font-size:13px;
+}
+
+.fuel-option-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  margin-top:20px;
+}
+
+.fuel-option{
+  display:block;
+  min-width:0;
+  margin:0!important;
+  cursor:pointer;
+}
+
+#vehicle-form .fuel-option > input{
+  position:absolute;
+  width:1px;
+  height:1px;
+  min-height:0;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  clip:rect(0 0 0 0);
+  clip-path:inset(50%);
+  white-space:nowrap;
+}
+
+.fuel-option > span{
+  position:relative;
+  display:block;
+  overflow:hidden;
+  border:2px solid rgba(8,46,101,.12);
+  border-radius:13px;
+  background:#f8fbff;
+  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+
+.fuel-option:hover > span{
+  transform:translateY(-2px);
+  border-color:rgba(11,79,179,.38);
+}
+
+.fuel-option > input:focus-visible + span{
+  outline:3px solid rgba(11,79,179,.25);
+  outline-offset:3px;
+}
+
+.fuel-option > input:checked + span{
+  border-color:#0b4fb3;
+  box-shadow:0 0 0 3px rgba(11,79,179,.12),0 12px 28px rgba(8,46,101,.12);
+}
+
+.fuel-option > input:checked + span::after{
+  content:"✓";
+  position:absolute;
+  top:8px;
+  right:8px;
+  width:27px;
+  height:27px;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  background:#0b4fb3;
+  border-radius:50%;
+  font-size:13px;
+  font-weight:900;
+}
+
+.fuel-option img{
+  width:100%;
+  aspect-ratio:1;
+  display:block;
+  object-fit:cover;
+}
+
+.fuel-option strong{
+  display:block;
+  padding:10px 7px;
+  color:#082d68;
+  background:#fff;
+  font-size:12px;
+  text-align:center;
+}
+
+.service-config{
+  margin:26px 0 22px;
+  padding:24px;
+  border:1px solid rgba(8,46,101,.14);
+  border-radius:16px;
+  background:linear-gradient(180deg,#f8fbff,#f1f7ff);
+}
+
+.service-config-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:24px;
+}
+
+.service-config-head small{
+  color:#0b4fb3;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+.service-config-head h3{
+  margin:5px 0 6px;
+  color:#06275b;
+  font-size:22px;
+}
+
+.service-config-head p{
+  margin:0;
+  color:#61738b;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.formula-pill{
+  flex:0 0 auto;
+  padding:9px 12px;
+  color:#fff;
+  background:#0b4fb3;
+  border-radius:999px;
+  font-size:11px;
+  white-space:nowrap;
+}
+
+.service-option-columns{
+  display:grid;
+  grid-template-columns:1.35fr .85fr;
+  gap:18px;
+  margin-top:22px;
+}
+
+.service-option-columns[hidden]{
+  display:none;
+}
+
+.service-option-columns fieldset{
+  min-width:0;
+  margin:0;
+  padding:17px;
+  border:1px solid rgba(8,46,101,.13);
+  border-radius:13px;
+  background:#fff;
+}
+
+.service-option-columns legend{
+  padding:0 7px;
+  color:#082d68;
+  font-size:12px;
+  font-weight:900;
+}
+
+.service-check-list{
+  display:grid;
+  gap:9px;
+}
+
+.service-check{
+  display:grid;
+  grid-template-columns:20px 1fr;
+  align-items:start;
+  gap:10px;
+  min-height:0;
+  margin:0!important;
+  padding:10px;
+  color:#29496f;
+  border:1px solid rgba(8,46,101,.09);
+  border-radius:9px;
+  background:#f8fbff;
+  font-size:12px!important;
+  font-weight:700!important;
+  line-height:1.4;
+  cursor:pointer;
+}
+
+.service-check:has(input:checked){
+  color:#073b8b;
+  border-color:rgba(11,79,179,.32);
+  background:#eaf3ff;
+}
+
+#vehicle-form .service-check input{
+  width:18px;
+  height:18px;
+  min-height:0;
+  margin:0;
+  padding:0;
+  accent-color:#0b4fb3;
+}
+
+.service-empty-note{
+  margin:18px 0 0;
+  padding:13px;
+  color:#64758d;
+  border:1px dashed rgba(8,46,101,.2);
+  border-radius:10px;
+  background:#fff;
+  font-size:13px;
+}
+
+.offer-note-config{
+  margin:26px 0 22px;
+  padding:24px;
+  border:1px solid rgba(8,46,101,.14);
+  border-radius:16px;
+  background:#f8fbff;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+
+.offer-note-config.is-enabled{
+  border-color:rgba(11,79,179,.35);
+  box-shadow:0 10px 28px rgba(8,46,101,.07);
+}
+
+.offer-note-head small{
+  color:#0b4fb3;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+.offer-note-head h3{
+  margin:5px 0 6px;
+  color:#06275b;
+  font-size:22px;
+}
+
+.offer-note-head p{
+  margin:0;
+  color:#61738b;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.offer-note-fields{
+  display:grid;
+  grid-template-columns:1fr minmax(210px,.7fr);
+  gap:14px;
+  align-items:end;
+  margin-top:20px;
+}
+
+.offer-note-switch{
+  display:grid;
+  grid-template-columns:20px 1fr;
+  gap:10px;
+  align-items:center;
+  min-height:50px;
+  margin:0;
+  padding:13px 15px;
+  color:#29496f;
+  border:1px solid rgba(8,46,101,.13);
+  border-radius:11px;
+  background:#fff;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+#vehicle-form .offer-note-switch input{
+  width:18px;
+  height:18px;
+  min-height:0;
+  margin:0;
+  padding:0;
+  accent-color:#0b4fb3;
+}
+
+.offer-date-field{
+  display:grid;
+  gap:8px;
+  margin:0;
+  color:#29496f;
+  font-size:12px;
+  font-weight:800;
+}
+
+.offer-date-field input:disabled{
+  cursor:not-allowed;
+  opacity:.55;
+}
+
+.offer-note-preview{
+  margin:16px 0 0;
+  padding:13px 15px;
+  color:#0b4fb3;
+  border-left:3px solid #0b4fb3;
+  border-radius:0 9px 9px 0;
+  background:#eaf3ff;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.5;
+  opacity:.62;
+}
+
+.offer-note-config.is-enabled .offer-note-preview{
+  opacity:1;
+}
+
 /* RESPONSIVE */
 @media(max-width:700px){
   .admin-header{
@@ -406,5 +748,39 @@ dialog::backdrop{
 
   #vehicle-form{
     padding:24px 18px;
+  }
+
+  .service-config{
+    padding:19px 15px;
+  }
+
+  .fuel-config{
+    padding:19px 15px;
+  }
+
+  .fuel-option-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+
+  .service-config-head{
+    display:block;
+  }
+
+  .formula-pill{
+    display:inline-flex;
+    margin-top:14px;
+  }
+
+  .service-option-columns{
+    grid-template-columns:1fr;
+  }
+
+  .offer-note-config{
+    padding:19px 15px;
+  }
+
+  .offer-note-fields{
+    grid-template-columns:1fr;
   }
 }

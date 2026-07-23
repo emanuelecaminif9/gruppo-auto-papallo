@@ -10,6 +10,7 @@ const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const serviceCatalog = require('./service-catalog');
 
 const app = express();
 const ROOT = __dirname;
@@ -36,6 +37,7 @@ const RENTAL_CATEGORIES = [
   'Noleggio CHTEC',
   'Noleggio Veicoli Commerciali'
 ];
+const FUEL_TYPES = ['Plug-in Hybrid', 'Hybrid', 'Elettrica', 'Termica'];
 
 function normalizeAdminPath(value) {
   const cleaned = `/${String(value || '').trim().replace(/^\/+|\/+$/g, '')}`;
@@ -130,6 +132,31 @@ function cleanText(value, max = 180) {
   return String(value || '').replace(/[<>]/g, '').trim().slice(0, max);
 }
 
+function normalizeFuelType(value) {
+  const cleaned = cleanText(value, 40);
+  const normalized = cleaned.toLowerCase();
+  if (normalized.includes('plug')) return 'Plug-in Hybrid';
+  if (normalized.includes('elettr') || normalized.includes('electric')) return 'Elettrica';
+  if (normalized.includes('hybrid') || normalized.includes('ibrid')) return 'Hybrid';
+  if (['termica', 'benzina', 'diesel', 'gpl', 'metano', 'gas'].some(name => normalized.includes(name))) {
+    return 'Termica';
+  }
+  return FUEL_TYPES.includes(cleaned) ? cleaned : '';
+}
+
+function normalizeOfferDate(value) {
+  const cleaned = cleanText(value, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(cleaned)) return '';
+  const [year, month, day] = cleaned.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (
+    date.getUTCFullYear() !== year
+    || date.getUTCMonth() !== month - 1
+    || date.getUTCDate() !== day
+  ) return '';
+  return cleaned;
+}
+
 function normalizeVehicle(body, existing = {}) {
   const price = Number(body.price);
   const seats = body.seats ? Number(body.seats) : null;
@@ -137,18 +164,37 @@ function normalizeVehicle(body, existing = {}) {
   const brand = cleanText(body.brand, 60);
   const model = cleanText(body.model, 80);
   const requestedCategory = cleanText(body.category, 60);
+  const showOfferDisclaimer = body.showOfferDisclaimer === 'true'
+    || body.showOfferDisclaimer === true
+    || body.showOfferDisclaimer === 'on';
+  const validUntil = normalizeOfferDate(body.validUntil);
 
   if (!brand || !model) throw new Error('Marca e modello sono obbligatori.');
   if (!Number.isFinite(price) || price < 0 || price > 1000000) throw new Error('Inserisci un prezzo valido.');
+  if (showOfferDisclaimer && !validUntil) throw new Error('Seleziona una data valida per l’offerta.');
+
+  const category = RENTAL_CATEGORIES.includes(requestedCategory) ? requestedCategory : 'Noleggio Privati';
+  const servicesConfigured = body.servicesConfigured === 'true'
+    || body.servicesConfigured === true
+    || body.servicesConfigured === 'on';
+  const previousConfigured = existing.servicesConfigured === true
+    || Array.isArray(existing.includedServices)
+    || Array.isArray(existing.optionalServices);
+  const serviceSelection = serviceCatalog.selectionForCategory(
+    category,
+    servicesConfigured ? body.includedServices : existing.includedServices,
+    servicesConfigured ? body.optionalServices : existing.optionalServices,
+    servicesConfigured || previousConfigured
+  );
 
   return {
     ...existing,
     brand,
     model,
-    category: RENTAL_CATEGORIES.includes(requestedCategory) ? requestedCategory : 'Noleggio Privati',
+    category,
     price: Math.round(price * 100) / 100,
     priceUnit: ['giorno', 'settimana', 'mese'].includes(body.priceUnit) ? body.priceUnit : 'mese',
-    fuel: cleanText(body.fuel, 40),
+    fuel: normalizeFuelType(body.fuel || existing.fuel),
     transmission: cleanText(body.transmission, 40),
     seats: Number.isInteger(seats) && seats >= 1 && seats <= 30 ? seats : null,
     year: Number.isInteger(year) && year >= 1950 && year <= new Date().getFullYear() + 1 ? year : null,
@@ -159,7 +205,12 @@ function normalizeVehicle(body, existing = {}) {
     promo: body.promo === 'true' || body.promo === true || body.promo === 'on',
     status: body.status === 'reserved' ? 'reserved' : 'available',
     active: body.active === 'true' || body.active === true || body.active === 'on',
-    description: cleanText(body.description, 1000)
+    description: cleanText(body.description, 1000),
+    showOfferDisclaimer,
+    validUntil: showOfferDisclaimer ? validUntil : '',
+    servicesConfigured: servicesConfigured || previousConfigured,
+    includedServices: serviceSelection.includedServices,
+    optionalServices: serviceSelection.optionalServices
   };
 }
 
@@ -197,7 +248,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 6 * 1024 * 1024, files: MAX_IMAGES, fields: 30 },
+  limits: { fileSize: 6 * 1024 * 1024, files: MAX_IMAGES, fields: 50 },
   fileFilter: (_req, file, cb) => cb(null, ['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype))
 });
 
@@ -351,7 +402,7 @@ app.use('/assets', express.static(path.join(ROOT, 'assets'), { maxAge: '7d', dot
 app.get('/style.css', (_req, res) => res.sendFile(path.join(ROOT, 'style.css')));
 app.get('/script.js', (_req, res) => res.sendFile(path.join(ROOT, 'script.js')));
 app.get('/rental.js', (_req, res) => res.sendFile(path.join(ROOT, 'rental.js')));
-app.get('/rental.js', (_req, res) => res.sendFile(path.join(ROOT, 'rental.js')));
+app.get('/service-catalog.js', (_req, res) => res.sendFile(path.join(ROOT, 'service-catalog.js')));
 app.get('/admin.css', (_req, res) => res.sendFile(path.join(ROOT, 'admin.css')));
 app.get('/admin.js', (_req, res) => res.sendFile(path.join(ROOT, 'admin.js')));
 app.get('/', (_req, res) => res.sendFile(path.join(ROOT, 'index.html')));

@@ -38,9 +38,9 @@
       <div class="form-grid">
         <label>Marca *<input name="brand" required maxlength="60" placeholder="Es. Fiat"></label>
         <label>Modello *<input name="model" required maxlength="80" placeholder="Es. 500 Hybrid"></label>
-        <label>Categoria *
+        <label>Formula / categoria *
           <select name="category" required>
-            <option value="">Seleziona una categoria</option>
+            <option value="">Seleziona una formula</option>
             <option value="Noleggio Privati">Noleggio Privati</option>
             <option value="Noleggio Aziende">Noleggio Aziende</option>
             <option value="Noleggio Professionisti">Noleggio Professionisti</option>
@@ -50,7 +50,6 @@
         </label>
         <label>Prezzo *<input name="price" required type="number" min="0" step="1" placeholder="499"></label>
         <label>Unità prezzo<select name="priceUnit"><option value="giorno">al giorno</option><option value="settimana">a settimana</option><option value="mese" selected>al mese</option></select></label>
-        <label>Alimentazione<input name="fuel" maxlength="40" placeholder="Es. Hybrid"></label>
         <label>Cambio<input name="transmission" maxlength="40" placeholder="Es. Automatico"></label>
         <label>Posti<input name="seats" type="number" min="1" max="20" placeholder="5"></label>
         <label>Anno<input name="year" type="number" min="1950" max="2100" placeholder="2025"></label>
@@ -71,6 +70,73 @@
         </label>
         <label>Disponibilità<select name="status"><option value="available">Disponibile</option><option value="reserved">Prenotata</option></select></label>
       </div>
+      <section class="fuel-config" aria-labelledby="fuel-config-title">
+        <div class="fuel-config-head">
+          <small>ALIMENTAZIONE</small>
+          <h3 id="fuel-config-title">Scegli la motorizzazione</h3>
+          <p>Questa informazione comparirà nella scheda pubblica dell’auto.</p>
+        </div>
+        <div class="fuel-option-grid">
+          <label class="fuel-option">
+            <input type="radio" name="fuel" value="Plug-in Hybrid" required>
+            <span><img src="assets/admin-fuel/plug-in-hybrid.jpg" alt=""><strong>Plug-in Hybrid</strong></span>
+          </label>
+          <label class="fuel-option">
+            <input type="radio" name="fuel" value="Hybrid">
+            <span><img src="assets/admin-fuel/hybrid.jpg" alt=""><strong>Hybrid</strong></span>
+          </label>
+          <label class="fuel-option">
+            <input type="radio" name="fuel" value="Elettrica">
+            <span><img src="assets/admin-fuel/elettrica.jpg" alt=""><strong>Elettrica</strong></span>
+          </label>
+          <label class="fuel-option">
+            <input type="radio" name="fuel" value="Termica">
+            <span><img src="assets/admin-fuel/termica.jpg" alt=""><strong>Termica</strong></span>
+          </label>
+        </div>
+      </section>
+      <input type="hidden" name="servicesConfigured" value="true">
+      <section class="service-config" id="service-config" aria-labelledby="service-config-title">
+        <div class="service-config-head">
+          <div>
+            <small>SERVIZI DELLA FORMULA</small>
+            <h3 id="service-config-title">Scegli cosa mostrare nella scheda</h3>
+            <p>Le opzioni selezionate compariranno sotto l’offerta di questa auto.</p>
+          </div>
+          <strong class="formula-pill" id="service-formula-label">Seleziona una formula</strong>
+        </div>
+        <div class="service-option-columns" id="service-option-columns" hidden>
+          <fieldset>
+            <legend>Servizi inclusi</legend>
+            <div class="service-check-list" id="included-service-options"></div>
+          </fieldset>
+          <fieldset>
+            <legend>Servizi opzionali a pagamento</legend>
+            <div class="service-check-list" id="optional-service-options"></div>
+          </fieldset>
+        </div>
+        <p class="service-empty-note" id="service-empty-note">Seleziona prima la formula o la categoria dell’auto.</p>
+      </section>
+      <section class="offer-note-config" id="offer-note-config" aria-labelledby="offer-note-title">
+        <div class="offer-note-head">
+          <small>NOTA LEGALE DELL’OFFERTA</small>
+          <h3 id="offer-note-title">Imposta la validità dell’offerta</h3>
+          <p>Attiva la dicitura informativa e scegli la data che comparirà nella scheda pubblica dell’auto.</p>
+        </div>
+        <div class="offer-note-fields">
+          <label class="offer-note-switch">
+            <input type="checkbox" name="showOfferDisclaimer">
+            <span>Mostra la frase informativa nell’offerta</span>
+          </label>
+          <label class="offer-date-field">
+            Valida fino al
+            <input type="date" name="validUntil">
+          </label>
+        </div>
+        <p class="offer-note-preview" id="offer-note-preview">
+          Immagine illustrativa. Offerta soggetta a disponibilità e conferma del noleggiatore. Valida fino al <strong>[data]</strong>.
+        </p>
+      </section>
       <label>Descrizione<textarea name="description" maxlength="500" rows="4" placeholder="Descrizione breve della vettura e dell’offerta..."></textarea></label>
       <label class="upload-box">Foto dell’auto <span>JPG, PNG o WebP — massimo 10 foto, 6 MB ciascuna</span><input name="images" type="file" accept="image/jpeg,image/png,image/webp" multiple><div id="image-preview"></div></label>
       <label class="switch-row"><input name="active" type="checkbox" checked><span>Pubblica questa auto sul sito</span></label>
@@ -78,6 +144,7 @@
       <div class="modal-actions"><button type="button" id="cancel-dialog">Annulla</button><button class="primary" type="submit" id="save-vehicle">Salva auto</button></div>
     </form>
   </dialog>
+  <script src="service-catalog.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>

@@ -5,6 +5,7 @@
   const sort = document.querySelector('#vehicle-sort');
   const categoryButtons = [...document.querySelectorAll('[data-category]')];
   const categoryLinks = [...document.querySelectorAll('[data-category-link]')];
+  const serviceCatalog = window.PapalloServices;
 
   const modal = document.querySelector('#vehicle-modal');
   const modalClose = document.querySelector('#vehicle-modal-close');
@@ -83,6 +84,49 @@
     ].filter(Boolean);
   }
 
+  function formatOfferDate(value) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ''))) return '';
+    const date = new Date(`${value}T12:00:00`);
+    if (Number.isNaN(date.getTime())) return '';
+    return new Intl.DateTimeFormat('it-IT', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    }).format(date);
+  }
+
+  function offerDisclaimerMarkup(vehicle, extraClass = '') {
+    const validUntil = formatOfferDate(vehicle.validUntil);
+    if (vehicle.showOfferDisclaimer !== true || !validUntil) return '';
+
+    return `<p class="vehicle-offer-disclaimer ${extraClass}">
+      Immagine illustrativa. Offerta soggetta a disponibilità e conferma del noleggiatore. Valida fino al <strong>${escapeHtml(validUntil)}</strong>.
+    </p>`;
+  }
+
+  function servicePackageMarkup(vehicle, extraClass = '') {
+    if (!serviceCatalog) return '';
+    const packageInfo = serviceCatalog.resolveVehicle(vehicle);
+    const includedMarkup = packageInfo.included.length
+      ? `<ul>${packageInfo.included.map(service => `<li>${escapeHtml(service.label)}</li>`).join('')}</ul>`
+      : '<p class="vehicle-services-empty">Servizi da definire con il consulente.</p>';
+    const optionalMarkup = packageInfo.optional.length
+      ? `<div class="vehicle-optional-services">
+          <small>Servizi opzionali a pagamento</small>
+          <div>${packageInfo.optional.map(service => `<span>${escapeHtml(service.label)}</span>`).join('')}</div>
+        </div>`
+      : '';
+
+    return `<section class="vehicle-services-box ${extraClass}" aria-label="Servizi della ${escapeHtml(packageInfo.formulaLabel)}">
+      <div class="vehicle-services-head">
+        <div><small>Servizi inclusi</small><strong>${escapeHtml(packageInfo.formulaLabel)}</strong></div>
+        <span>${packageInfo.included.length}</span>
+      </div>
+      ${includedMarkup}
+      ${optionalMarkup}
+    </section>`;
+  }
+
   function vehicleCard(vehicle) {
     const images = getImages(vehicle);
     const specs = getSpecs(vehicle);
@@ -132,6 +176,9 @@
             <a class="btn btn-primary" href="https://wa.me/393336063849?text=${message}" target="_blank" rel="noopener">Richiedi preventivo</a>
             <button class="btn btn-details" type="button" data-open-vehicle="${escapeHtml(vehicle.id)}">Vedi dettagli <span>→</span></button>
           </div>
+
+          ${servicePackageMarkup(vehicle)}
+          ${offerDisclaimerMarkup(vehicle)}
 
           <div class="vehicle-trust-row">
             <span>Assistenza dedicata</span><span>Nessun costo nascosto</span><span>Consegna concordata</span>
@@ -231,6 +278,17 @@
     modalAdvance.textContent = Number(vehicle.advance || 0) > 0 ? euro(vehicle.advance) : 'Anticipo zero';
     modalVat.textContent = vehicle.vatMode === 'excluded' ? 'IVA esclusa' : 'IVA inclusa';
     modalWhatsapp.href = `https://wa.me/393336063849?text=${message}`;
+
+    let modalServices = document.querySelector('#vehicle-modal-services');
+    if (!modalServices) {
+      modalServices = document.createElement('div');
+      modalServices.id = 'vehicle-modal-services';
+      document.querySelector('.vehicle-modal-actions')?.before(modalServices);
+    }
+    modalServices.innerHTML = `
+      ${servicePackageMarkup(vehicle, 'vehicle-services-modal')}
+      ${offerDisclaimerMarkup(vehicle, 'vehicle-offer-disclaimer--modal')}
+    `;
 
     updateGallery();
     modal.hidden = false;

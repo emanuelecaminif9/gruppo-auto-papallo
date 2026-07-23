@@ -19,12 +19,25 @@
       "/uploads/1783953186893-27978ddc-1cec-4484-bb9d-c451f0f49ce1.jpg"
     ],
     "createdAt": "2026-07-13T10:00:00.000Z",
-    "updatedAt": "2026-07-13T14:33:06.897Z",
+    "updatedAt": "2026-07-23T08:57:25.976Z",
     "duration": "36 mesi",
     "includedKm": "30.000 km",
     "advance": 2000,
     "vatMode": "included",
-    "promo": true
+    "promo": true,
+    "servicesConfigured": true,
+    "includedServices": [
+      "rca-250",
+      "kasko-500",
+      "furto-incendio-10",
+      "manutenzione",
+      "assistenza-24-7"
+    ],
+    "optionalServices": [
+      "auto-sostitutiva",
+      "cambio-pneumatici",
+      "riduzione-franchigie"
+    ]
   },
   {
     "id": "6ddb2d48-bae5-46f2-b961-63d719c82660",
