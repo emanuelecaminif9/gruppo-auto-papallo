@@ -126,6 +126,9 @@
     list.innerHTML = vehicles.map(vehicle => {
       const packageInfo = serviceCatalog.resolveVehicle(vehicle);
       const selectedCount = packageInfo.included.length;
+      const offerDate = vehicle.showOfferDisclaimer && vehicle.validUntil
+        ? formatOfferDate(vehicle.validUntil)
+        : '';
 
       return `<article class="admin-car">
         <img src="${esc(vehicle.images?.[0] || 'assets/auto-placeholder.svg')}" alt="">
@@ -136,6 +139,7 @@
           </h3>
           <p>${esc(packageInfo.formulaLabel)} · ${esc(vehicle.fuel || 'Alimentazione non indicata')} · ${esc(vehicle.transmission || 'Cambio non indicato')}</p>
           <div class="admin-service-summary">${selectedCount} servizi inclusi · ${packageInfo.optional.length} opzionali</div>
+          ${offerDate ? `<div class="admin-offer-note-summary">Nota offerta attiva fino al ${esc(offerDate)}</div>` : ''}
           <span class="price">${euro(vehicle.price)} / ${esc(vehicle.priceUnit || 'mese')}</span>
         </div>
         <div class="car-actions">
@@ -263,9 +267,12 @@
     event.preventDefault();
     formStatus.textContent = 'Salvataggio in corso...';
     const data = new FormData(form);
+    const selectedFuel = form.querySelector('input[name="fuel"]:checked');
     data.set('active', String(form.active.checked));
     data.set('servicesConfigured', 'true');
+    data.set('fuel', selectedFuel?.value || '');
     data.set('showOfferDisclaimer', String(form.elements.showOfferDisclaimer.checked));
+    data.set('validUntil', form.elements.showOfferDisclaimer.checked ? form.elements.validUntil.value : '');
     const id = form.elements.id.value;
 
     if (form.elements.showOfferDisclaimer.checked && !form.elements.validUntil.value) {

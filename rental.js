@@ -97,7 +97,9 @@
 
   function offerDisclaimerMarkup(vehicle, extraClass = '') {
     const validUntil = formatOfferDate(vehicle.validUntil);
-    if (vehicle.showOfferDisclaimer !== true || !validUntil) return '';
+    const isEnabled = vehicle.showOfferDisclaimer === true
+      || String(vehicle.showOfferDisclaimer).toLowerCase() === 'true';
+    if (!isEnabled || !validUntil) return '';
 
     return `<p class="vehicle-offer-disclaimer ${extraClass}">
       Immagine illustrativa. Offerta soggetta a disponibilità e conferma del noleggiatore. Valida fino al <strong>${escapeHtml(validUntil)}</strong>.
@@ -320,7 +322,10 @@
 
   async function loadVehicles() {
     try {
-      const response = await fetch('/api/vehicles', { headers: { Accept: 'application/json' } });
+      const response = await fetch(`/api/vehicles?refresh=${Date.now()}`, {
+        cache: 'no-store',
+        headers: { Accept: 'application/json' }
+      });
       if (!response.ok) throw new Error('Errore caricamento');
       vehicles = await response.json();
       render();

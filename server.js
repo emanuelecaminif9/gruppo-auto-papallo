@@ -340,7 +340,7 @@ app.post('/api/admin/logout', sameOrigin, (_req, res) => {
 app.get('/api/admin/session', auth, (req, res) => res.json({ authenticated: true, email: req.admin.email }));
 
 app.get('/api/vehicles', (_req, res) => {
-  res.set('Cache-Control', 'public, max-age=60');
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
   res.json(readVehicles().filter(vehicle => vehicle.active !== false));
 });
 app.get('/api/admin/vehicles', auth, (_req, res) => {
