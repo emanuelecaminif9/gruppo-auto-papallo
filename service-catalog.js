@@ -11,8 +11,16 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function createPapalloServices() {
   const includedServices = Object.freeze([
     { id: 'rca-250', label: 'RCA con franchigia di 250 €' },
+    { id: 'rca-0', label: 'RCA con franchigia di 0 €' },
     { id: 'kasko-500', label: 'Kasko con franchigia di 500 €' },
+    { id: 'kasko-0', label: 'Kasko con franchigia di 0 €' },
+    { id: 'kasko-250', label: 'Kasko con franchigia di 250 €' },
+    { id: 'kasko-1000', label: 'Kasko con franchigia di 1.000 €' },
     { id: 'furto-incendio-10', label: 'Furto e incendio con scoperto del 10%' },
+    { id: 'furto-incendio-0', label: 'Furto e incendio con scoperto 0%' },
+    { id: 'pai-conducente', label: 'PAI (infortuni conducente)' },
+    { id: 'rimborso-medicine', label: 'Rimborso spese medicine' },
+    { id: 'tutela-legale', label: 'Tutela legale' },
     { id: 'manutenzione', label: 'Manutenzione ordinaria e straordinaria' },
     { id: 'assistenza-24-7', label: 'Assistenza stradale 24/7' },
     { id: 'gestione-multe-bollo', label: 'Gestione amministrativa di multe e tassa di possesso' },
@@ -42,38 +50,42 @@
     'riduzione-franchigie'
   ]);
 
+  const allIncluded = Object.freeze(includedServices
+    .map(service => service.id)
+    .filter(id => id !== 'condizioni-fisse'));
+
   const profiles = Object.freeze({
     'Noleggio Privati': {
       label: 'Formula Privati',
-      availableIncluded: standardIncluded,
+      availableIncluded: allIncluded,
       defaultIncluded: standardIncluded.slice(0, 5),
       availableOptional: standardOptional,
       defaultOptional: standardOptional
     },
     'Noleggio Aziende': {
       label: 'Formula Aziende',
-      availableIncluded: standardIncluded,
+      availableIncluded: allIncluded,
       defaultIncluded: standardIncluded,
       availableOptional: standardOptional,
       defaultOptional: standardOptional
     },
     'Noleggio Professionisti': {
       label: 'Formula Professionisti',
-      availableIncluded: standardIncluded,
+      availableIncluded: allIncluded,
       defaultIncluded: standardIncluded,
       availableOptional: standardOptional,
       defaultOptional: standardOptional
     },
     'Noleggio CHTEC': {
       label: 'Formula CHTEC',
-      availableIncluded: Object.freeze([...standardIncluded, 'condizioni-fisse']),
+      availableIncluded: Object.freeze([...allIncluded, 'condizioni-fisse']),
       defaultIncluded: Object.freeze([...standardIncluded, 'condizioni-fisse']),
       availableOptional: Object.freeze(['auto-sostitutiva', 'cambio-pneumatici']),
       defaultOptional: Object.freeze(['auto-sostitutiva', 'cambio-pneumatici'])
     },
     'Noleggio Veicoli Commerciali': {
       label: 'Formula Veicoli Commerciali',
-      availableIncluded: standardIncluded,
+      availableIncluded: allIncluded,
       defaultIncluded: standardIncluded,
       availableOptional: standardOptional,
       defaultOptional: Object.freeze(['auto-sostitutiva', 'cambio-pneumatici'])

@@ -10,7 +10,7 @@
     "transmission": "Manuale",
     "seats": 4,
     "year": 2025,
-    "status": "available",
+    "status": "stock",
     "active": true,
     "description": "Compatta, efficiente e perfetta per la mobilità urbana.",
     "images": [
@@ -51,7 +51,7 @@
     "transmission": "Automatico",
     "seats": 2,
     "year": 2018,
-    "status": "available",
+    "status": "stock",
     "active": true,
     "description": "Compatta, elegante e perfetta per la città: questa Smart Fortwo del 2018 con cambio automatico è la soluzione ideale per chi cerca praticità, stile e facilità di guida.\r\n\r\nLa carrozzeria nera le dona un look moderno e raffinato, mentre le dimensioni compatte permettono di muoversi agilmente nel traffico e parcheggiare con estrema facilità anche negli spazi più stretti.\r\n\r\nIl cambio automatico garantisce una guida comoda e rilassante, rendendola perfetta sia per gli spostamenti quotidiani che per chi",
     "updatedAt": "2026-07-13T14:28:11.331Z",

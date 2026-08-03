@@ -2,6 +2,7 @@
   const grid = document.querySelector('#vehicle-grid');
   const empty = document.querySelector('#inventory-empty');
   const search = document.querySelector('#vehicle-search');
+  const fuelFilter = document.querySelector('#vehicle-fuel');
   const sort = document.querySelector('#vehicle-sort');
   const categoryButtons = [...document.querySelectorAll('[data-category]')];
   const categoryLinks = [...document.querySelectorAll('[data-category-link]')];
@@ -115,6 +116,14 @@
     return null;
   }
 
+  function availabilityInfo(value) {
+    const isOrder = value === 'order' || value === 'reserved';
+    return {
+      label: isOrder ? 'Su ordine' : 'In stock',
+      className: isOrder ? 'order' : 'stock'
+    };
+  }
+
   function fuelVisualMarkup(vehicle, extraClass = '') {
     const visual = resolveFuelVisual(vehicle.fuel);
     if (!visual) return '';
@@ -178,7 +187,7 @@
     const images = getImages(vehicle);
     const specs = getSpecs(vehicle);
     const category = normalizeCategory(vehicle.category);
-    const isReserved = vehicle.status === 'reserved';
+    const availability = availabilityInfo(vehicle.status);
     const vatLabel = vehicle.vatMode === 'excluded' ? 'IVA esclusa' : 'IVA inclusa';
     const duration = vehicle.duration || 'Da definire';
     const includedKm = vehicle.includedKm || 'Da definire';
@@ -199,7 +208,7 @@
           aria-label="Vedi dettagli e foto di ${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}"
         >
           <img src="${escapeHtml(images[0])}" alt="${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}" loading="lazy">
-          <span class="vehicle-label ${isReserved ? 'reserved' : ''}">${isReserved ? 'Prenotata' : 'Disponibile'}</span>
+          <span class="vehicle-label ${availability.className}">${availability.label}</span>
           ${images.length > 1 ? `<span class="vehicle-photo-count">▧ ${images.length} foto</span>` : ''}
         </button>
 
@@ -248,11 +257,14 @@
     if (!grid || !empty) return;
 
     const term = (search?.value || '').trim().toLowerCase();
+    const selectedFuel = fuelFilter?.value || 'all';
     let list = vehicles.filter(vehicle => {
       const category = normalizeCategory(vehicle.category);
       const matchesCategory = activeCategory === 'all' || category === activeCategory;
+      const vehicleFuel = resolveFuelVisual(vehicle.fuel)?.label || '';
+      const matchesFuel = selectedFuel === 'all' || vehicleFuel === selectedFuel;
       const searchableText = `${vehicle.brand || ''} ${vehicle.model || ''} ${category} ${vehicle.fuel || ''}`.toLowerCase();
-      return vehicle.active !== false && matchesCategory && searchableText.includes(term);
+      return vehicle.active !== false && matchesCategory && matchesFuel && searchableText.includes(term);
     });
 
     if (sort?.value === 'price-asc') {
@@ -310,13 +322,14 @@
     currentImageIndex = 0;
     lastFocusedElement = trigger || document.activeElement;
     const specs = getSpecs(vehicle);
-    const isReserved = vehicle.status === 'reserved';
+    const availability = availabilityInfo(vehicle.status);
     const message = encodeURIComponent(`Buongiorno, vorrei informazioni per il noleggio di ${vehicle.brand} ${vehicle.model}.`);
 
     modalCategory.textContent = normalizeCategory(vehicle.category);
     modalTitle.textContent = `${vehicle.brand} ${vehicle.model}`;
-    modalStatus.textContent = isReserved ? 'Prenotata' : 'Disponibile';
-    modalStatus.classList.toggle('reserved', isReserved);
+    modalStatus.textContent = availability.label;
+    modalStatus.classList.toggle('order', availability.className === 'order');
+    modalStatus.classList.remove('reserved');
     modalSpecs.innerHTML = specs.map(spec => `<span>${escapeHtml(spec)}</span>`).join('');
     modalDescription.textContent = vehicle.description || 'Contattaci per ricevere tutte le informazioni sulla vettura e sulle condizioni di noleggio.';
 
@@ -433,6 +446,7 @@
   });
 
   search?.addEventListener('input', render);
+  fuelFilter?.addEventListener('change', render);
   sort?.addEventListener('change', render);
 
   loadVehicles();

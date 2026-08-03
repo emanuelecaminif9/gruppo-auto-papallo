@@ -25,7 +25,7 @@
       </header>
       <div class="dashboard-body">
         <div class="dashboard-title"><div><small>PARCO AUTO</small><h1>Auto a noleggio</h1><p>Gestisci in autonomia vetture, prezzi, foto e disponibilità.</p></div><button class="primary" id="new-vehicle">＋ Inserisci auto</button></div>
-        <div class="stats"><article><span id="total-count">0</span><small>Auto totali</small></article><article><span id="active-count">0</span><small>Pubblicate</small></article><article><span id="reserved-count">0</span><small>Prenotate</small></article></div>
+        <div class="stats"><article><span id="total-count">0</span><small>Auto totali</small></article><article><span id="active-count">0</span><small>Pubblicate</small></article><article><span id="reserved-count">0</span><small>Su ordine</small></article></div>
         <div class="admin-list" id="admin-list"></div>
       </div>
     </section>
@@ -68,7 +68,7 @@
             <option value="true">Sì</option>
           </select>
         </label>
-        <label>Disponibilità<select name="status"><option value="available">Disponibile</option><option value="reserved">Prenotata</option></select></label>
+        <label>Disponibilità<select name="status"><option value="stock">In stock</option><option value="order">Su ordine</option></select></label>
       </div>
       <section class="fuel-config" aria-labelledby="fuel-config-title">
         <div class="fuel-config-head">
@@ -137,8 +137,8 @@
           Immagine illustrativa. Offerta soggetta a disponibilità e conferma del noleggiatore. Valida fino al <strong>[data]</strong>.
         </p>
       </section>
-      <label>Descrizione<textarea name="description" maxlength="500" rows="4" placeholder="Descrizione breve della vettura e dell’offerta..."></textarea></label>
-      <label class="upload-box">Foto dell’auto <span>JPG, PNG o WebP — massimo 10 foto, 6 MB ciascuna</span><input name="images" type="file" accept="image/jpeg,image/png,image/webp" multiple><div id="image-preview"></div></label>
+      <label>Descrizione<textarea name="description" rows="7" placeholder="Inserisci la descrizione completa della vettura e dell’offerta, senza limiti di caratteri..."></textarea></label>
+      <label class="upload-box">Foto dell’auto <span>JPG, PNG o WebP — nessun limite di quantità, 6 MB per singola foto</span><input name="images" type="file" accept="image/jpeg,image/png,image/webp" multiple><div id="image-preview"></div></label>
       <label class="switch-row"><input name="active" type="checkbox" checked><span>Pubblica questa auto sul sito</span></label>
       <p class="status" id="form-status"></p>
       <div class="modal-actions"><button type="button" id="cancel-dialog">Annulla</button><button class="primary" type="submit" id="save-vehicle">Salva auto</button></div>

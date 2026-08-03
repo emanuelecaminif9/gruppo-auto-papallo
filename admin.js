@@ -32,6 +32,15 @@
     maximumFractionDigits: 0
   }).format(Number(value || 0));
 
+  function availabilityInfo(value) {
+    const isOrder = value === 'order' || value === 'reserved';
+    return {
+      value: isOrder ? 'order' : 'stock',
+      label: isOrder ? 'Su ordine' : 'In stock',
+      className: isOrder ? 'order' : 'stock'
+    };
+  }
+
   function normalizeFuelSelection(value) {
     const normalized = String(value || '').trim().toLowerCase();
     if (normalized.includes('plug')) return 'Plug-in Hybrid';
@@ -116,7 +125,8 @@
   function render() {
     document.querySelector('#total-count').textContent = vehicles.length;
     document.querySelector('#active-count').textContent = vehicles.filter(vehicle => vehicle.active).length;
-    document.querySelector('#reserved-count').textContent = vehicles.filter(vehicle => vehicle.status === 'reserved').length;
+    document.querySelector('#reserved-count').textContent = vehicles
+      .filter(vehicle => availabilityInfo(vehicle.status).value === 'order').length;
 
     if (!vehicles.length) {
       list.innerHTML = '<div class="empty-admin">Non hai ancora inserito auto a noleggio.</div>';
@@ -125,6 +135,7 @@
 
     list.innerHTML = vehicles.map(vehicle => {
       const packageInfo = serviceCatalog.resolveVehicle(vehicle);
+      const availability = availabilityInfo(vehicle.status);
       const selectedCount = packageInfo.included.length;
       const offerDate = vehicle.showOfferDisclaimer && vehicle.validUntil
         ? formatOfferDate(vehicle.validUntil)
@@ -134,7 +145,7 @@
         <img src="${esc(vehicle.images?.[0] || 'assets/auto-placeholder.svg')}" alt="">
         <div>
           <h3>${esc(vehicle.brand)} ${esc(vehicle.model)}
-            <span class="badge ${vehicle.status === 'reserved' ? 'reserved' : ''}">${vehicle.status === 'reserved' ? 'Prenotata' : 'Disponibile'}</span>
+            <span class="badge ${availability.className}">${availability.label}</span>
             ${!vehicle.active ? '<span class="badge hidden">Nascosta</span>' : ''}
           </h3>
           <p>${esc(packageInfo.formulaLabel)} · ${esc(vehicle.fuel || 'Alimentazione non indicata')} · ${esc(vehicle.transmission || 'Cambio non indicato')}</p>
@@ -207,6 +218,7 @@
       if (field.type === 'checkbox') field.checked = Boolean(value);
       else field.value = value ?? '';
     }
+    form.elements.status.value = availabilityInfo(vehicle.status).value;
 
     const fuelValue = normalizeFuelSelection(vehicle.fuel);
     const fuelOption = [...form.querySelectorAll('input[name="fuel"]')]
@@ -256,7 +268,7 @@
 
   form.images.addEventListener('change', () => {
     preview.innerHTML = '';
-    [...form.images.files].slice(0, 10).forEach(file => {
+    [...form.images.files].forEach(file => {
       const image = document.createElement('img');
       image.src = URL.createObjectURL(file);
       preview.appendChild(image);

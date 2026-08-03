@@ -253,6 +253,11 @@ body{
   color:#5f6d80;
 }
 
+.badge.order{
+  background:#eef2f7;
+  color:#5f6d80;
+}
+
 .badge.hidden{
   background:#fff0f0;
   color:#9c2730;
@@ -354,6 +359,12 @@ dialog::backdrop{
   object-fit:cover;
   border:2px solid #fff;
   box-shadow:0 7px 18px rgba(8,46,101,.12);
+}
+
+#image-preview{
+  max-height:280px;
+  overflow:auto;
+  padding-right:4px;
 }
 
 .empty-admin{

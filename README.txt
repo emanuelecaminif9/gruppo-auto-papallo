@@ -1,6 +1,8 @@
 GRUPPO AUTO PAPALLO – RESTYLING NOLEGGIO + PANNELLO PROTETTO
 
 COSA CONTIENE QUESTA VERSIONE
+- nuova landing page iniziale con accesso ad Auto Nuove, Auto Usate e Noleggio;
+- portale Noleggio completo nella pagina noleggio.html;
 - nuovo front-end nero, antracite, bianco e rosso coordinato al logo Papallo;
 - hero con richiesta preventivo immediata;
 - categorie: Noleggio Privati, Aziende, Professionisti, CHTEC e Veicoli Commerciali;
@@ -78,7 +80,7 @@ PROTEZIONI PRESENTI
 - API amministrative protette lato server;
 - Helmet e Content Security Policy;
 - verifica reale di JPEG, PNG e WEBP;
-- massimo 10 foto per veicolo, 6 MB ciascuna;
+- numero di foto per veicolo senza limite applicativo, 6 MB per singola foto;
 - scrittura atomica del database JSON.
 
 AGGIORNAMENTO SU GITHUB E RENDER

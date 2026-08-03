@@ -29,7 +29,7 @@ const ADMIN_PASSWORD_HASH = String(process.env.ADMIN_PASSWORD_HASH || '');
 const ADMIN_PATH = normalizeAdminPath(process.env.ADMIN_PATH || '/gestione-papallo');
 const PUBLIC_URL = String(process.env.PUBLIC_URL || '').replace(/\/$/, '');
 const COOKIE_NAME = 'papallo_admin';
-const MAX_IMAGES = 10;
+const MAX_IMAGE_SIZE_MB = 6;
 const RENTAL_CATEGORIES = [
   'Noleggio Privati',
   'Noleggio Aziende',
@@ -132,6 +132,15 @@ function cleanText(value, max = 180) {
   return String(value || '').replace(/[<>]/g, '').trim().slice(0, max);
 }
 
+function cleanDescription(value) {
+  return String(value || '').replace(/[<>]/g, '').trim();
+}
+
+function normalizeAvailabilityStatus(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  return normalized === 'order' || normalized === 'reserved' ? 'order' : 'stock';
+}
+
 function normalizeFuelType(value) {
   const cleaned = cleanText(value, 40);
   const normalized = cleaned.toLowerCase();
@@ -203,9 +212,9 @@ function normalizeVehicle(body, existing = {}) {
     advance: Number.isFinite(Number(body.advance)) && Number(body.advance) >= 0 ? Math.round(Number(body.advance) * 100) / 100 : 0,
     vatMode: body.vatMode === 'excluded' ? 'excluded' : 'included',
     promo: body.promo === 'true' || body.promo === true || body.promo === 'on',
-    status: body.status === 'reserved' ? 'reserved' : 'available',
+    status: normalizeAvailabilityStatus(body.status || existing.status),
     active: body.active === 'true' || body.active === true || body.active === 'on',
-    description: cleanText(body.description, 1000),
+    description: cleanDescription(body.description),
     showOfferDisclaimer,
     validUntil: showOfferDisclaimer ? validUntil : '',
     servicesConfigured: servicesConfigured || previousConfigured,
@@ -248,7 +257,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 6 * 1024 * 1024, files: MAX_IMAGES, fields: 50 },
+  limits: { fileSize: MAX_IMAGE_SIZE_MB * 1024 * 1024, fieldSize: Infinity, fields: 100 },
   fileFilter: (_req, file, cb) => cb(null, ['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype))
 });
 
@@ -341,14 +350,17 @@ app.get('/api/admin/session', auth, (req, res) => res.json({ authenticated: true
 
 app.get('/api/vehicles', (_req, res) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
-  res.json(readVehicles().filter(vehicle => vehicle.active !== false));
+  res.json(readVehicles()
+    .filter(vehicle => vehicle.active !== false)
+    .map(vehicle => ({ ...vehicle, status: normalizeAvailabilityStatus(vehicle.status) })));
 });
 app.get('/api/admin/vehicles', auth, (_req, res) => {
   res.set('Cache-Control', 'no-store');
-  res.json(readVehicles());
+  res.json(readVehicles()
+    .map(vehicle => ({ ...vehicle, status: normalizeAvailabilityStatus(vehicle.status) })));
 });
 
-app.post('/api/admin/vehicles', sameOrigin, auth, upload.array('images', MAX_IMAGES), validateUploadedFiles, (req, res) => {
+app.post('/api/admin/vehicles', sameOrigin, auth, upload.array('images'), validateUploadedFiles, (req, res) => {
   try {
     const now = new Date().toISOString();
     const vehicle = normalizeVehicle(req.body, { id: crypto.randomUUID(), createdAt: now });
@@ -364,7 +376,7 @@ app.post('/api/admin/vehicles', sameOrigin, auth, upload.array('images', MAX_IMA
   }
 });
 
-app.put('/api/admin/vehicles/:id', sameOrigin, auth, upload.array('images', MAX_IMAGES), validateUploadedFiles, (req, res) => {
+app.put('/api/admin/vehicles/:id', sameOrigin, auth, upload.array('images'), validateUploadedFiles, (req, res) => {
   try {
     const vehicles = readVehicles();
     const index = vehicles.findIndex(vehicle => vehicle.id === req.params.id);
@@ -400,6 +412,7 @@ app.delete('/api/admin/vehicles/:id', sameOrigin, auth, (req, res) => {
 app.use('/uploads', express.static(UPLOAD_DIR, { maxAge: '7d', immutable: true, dotfiles: 'deny' }));
 app.use('/assets', express.static(path.join(ROOT, 'assets'), { maxAge: '7d', dotfiles: 'deny' }));
 app.get('/style.css', (_req, res) => res.sendFile(path.join(ROOT, 'style.css')));
+app.get('/landing.css', (_req, res) => res.sendFile(path.join(ROOT, 'landing.css')));
 app.get('/script.js', (_req, res) => res.sendFile(path.join(ROOT, 'script.js')));
 app.get('/rental.js', (_req, res) => res.sendFile(path.join(ROOT, 'rental.js')));
 app.get('/service-catalog.js', (_req, res) => res.sendFile(path.join(ROOT, 'service-catalog.js')));
@@ -416,6 +429,12 @@ app.get('/cookie.html', (_req, res) =>
   res.sendFile(path.join(ROOT, 'cookie.html'))
 );
 app.get('/index.html', (_req, res) => res.sendFile(path.join(ROOT, 'index.html')));
+app.get('/noleggio', (_req, res) => res.sendFile(path.join(ROOT, 'noleggio.html')));
+app.get('/noleggio.html', (_req, res) => res.sendFile(path.join(ROOT, 'noleggio.html')));
+app.get('/nuove', (_req, res) => res.sendFile(path.join(ROOT, 'nuove.html')));
+app.get('/nuove.html', (_req, res) => res.sendFile(path.join(ROOT, 'nuove.html')));
+app.get('/usate', (_req, res) => res.sendFile(path.join(ROOT, 'usate.html')));
+app.get('/usate.html', (_req, res) => res.sendFile(path.join(ROOT, 'usate.html')));
 app.get('/noleggio-privati', (_req, res) => res.sendFile(path.join(ROOT, 'noleggio-privati.html')));
 app.get('/noleggio-aziende', (_req, res) => res.sendFile(path.join(ROOT, 'noleggio-aziende.html')));
 app.get('/noleggio-professionisti', (_req, res) => res.sendFile(path.join(ROOT, 'noleggio-professionisti.html')));
@@ -456,14 +475,22 @@ app.use((_req, res) => res.status(404).send('Pagina non trovata.'));
 app.use((err, req, res, _next) => {
   req.files?.forEach(file => { if (file.path && fs.existsSync(file.path)) fs.unlinkSync(file.path); });
   if (err instanceof multer.MulterError) {
-    return res.status(400).json({ error: `Foto non valida. Massimo ${MAX_IMAGES} foto e 6 MB per foto.` });
+    return res.status(400).json({ error: `Foto non valida. Ogni file può pesare al massimo ${MAX_IMAGE_SIZE_MB} MB.` });
   }
   if (err?.message?.includes('immagine')) return res.status(400).json({ error: err.message });
   console.error(err);
   res.status(500).json({ error: 'Errore interno del server.' });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Sito: http://localhost:${PORT}`);
-  console.log(`Pannello riservato: http://localhost:${PORT}${ADMIN_PATH}`);
-});
+if (require.main === module) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Sito: http://localhost:${PORT}`);
+    console.log(`Pannello riservato: http://localhost:${PORT}${ADMIN_PATH}`);
+  });
+}
+
+module.exports = {
+  app,
+  normalizeVehicle,
+  normalizeAvailabilityStatus
+};
